@@ -7,13 +7,11 @@
 
 <body>
     <h1>QR 코드 스캔 예제</h1>
-    <video id="videoElement" width="1280" height="960" autoplay></video>
-    <canvas id="canvas"></canvas>
+    <video id="videoElement" width="1280" height="960" autoplay playsinline></video>
     <button id="startButton">QR 코드 스캔 시작</button>
 
     <script>
         const videoElement = document.getElementById('videoElement');
-        const canvas = document.getElementById('canvas');
         const startButton = document.getElementById('startButton');
 
         const startScanner = async () => {
@@ -26,7 +24,10 @@
         };
 
         const scanQRCode = () => {
+            const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
             context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
@@ -40,6 +41,7 @@
 
         startButton.addEventListener('click', () => {
             startScanner();
+            videoElement.play(); // iOS에서 play() 추가
             requestAnimationFrame(scanQRCode);
         });
     </script>
