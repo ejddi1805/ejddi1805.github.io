@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 <html>
 
-<script>
-    const openCameraApp = () => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function (stream) {
-                    // 성공적으로 카메라 액세스 획득
-                })
-                .catch(function (error) {
-                    console.error('카메라 액세스 에러:', error);
-                });
-        } else {
-            console.error('getUserMedia를 지원하지 않음');
-        }
-    };
-</script>
-
 <body>
-    <h1>Hello World</h1>
-    <p>I'm hosted with GitHub Pages.</p>
-    <div>
-        <button onclick="openCameraApp()">카메라 실행</button>
-    </div>
+    <h1>카메라 실행 예제</h1>
+    <video id="videoElement" width="640" height="480" autoplay></video>
+    <button id="startButton">카메라 실행</button>
+
+    <script>
+        const videoElement = document.getElementById('videoElement');
+        const startButton = document.getElementById('startButton');
+
+        const startCamera = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+            } catch (error) {
+                console.error('카메라 액세스 에러:', error);
+            }
+        };
+
+        startButton.addEventListener('click', startCamera);
+    </script>
 </body>
 
 </html>
