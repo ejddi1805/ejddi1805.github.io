@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+    <title>QR 코드 스캔 예제</title>
+</head>
+
 <body>
-    <h1>카메라 실행 예제</h1>
+    <h1>QR 코드 스캔 예제</h1>
     <video id="videoElement" width="640" height="480" autoplay></video>
-    <button id="startButton">카메라 실행</button>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <button id="startButton">QR 코드 스캔 시작</button>
 
     <script>
         const videoElement = document.getElementById('videoElement');
+        const canvas = document.getElementById('canvas');
         const startButton = document.getElementById('startButton');
 
-        const startCamera = async () => {
+        const startScanner = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 videoElement.srcObject = stream;
@@ -19,8 +25,26 @@
             }
         };
 
-        startButton.addEventListener('click', startCamera);
+        const scanQRCode = () => {
+            const context = canvas.getContext('2d');
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+                alert('QR 코드가 발견되었습니다! 내용: ' + code.data);
+            } else {
+                requestAnimationFrame(scanQRCode);
+            }
+        };
+
+        startButton.addEventListener('click', () => {
+            startScanner();
+            requestAnimationFrame(scanQRCode);
+        });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 </body>
 
 </html>
