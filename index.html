@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <script>
     const openCameraApp = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -20,7 +21,7 @@
     <h1>Hello World</h1>
     <p>I'm hosted with GitHub Pages.</p>
     <div>
-        <button onClick={openCameraApp}>카메라 실행</button>
+        <button onclick="openCameraApp()">카메라 실행</button>
     </div>
 </body>
 
