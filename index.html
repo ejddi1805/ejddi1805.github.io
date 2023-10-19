@@ -18,7 +18,7 @@
 
         const startScanner = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
                 videoElement.srcObject = stream;
             } catch (error) {
                 console.error('카메라 액세스 에러:', error);
