@@ -7,16 +7,18 @@
 
 <body>
     <h1>QR 코드 스캔 예제</h1>
-    <video id="videoElement" width="1280" height="960" autoplay playsinline></video>
+    <video id="videoElement" width="640" height="480" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
     <button id="startButton">QR 코드 스캔 시작</button>
 
     <script>
         const videoElement = document.getElementById('videoElement');
+        const canvas = document.getElementById('canvas');
         const startButton = document.getElementById('startButton');
 
         const startScanner = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 videoElement.srcObject = stream;
             } catch (error) {
                 console.error('카메라 액세스 에러:', error);
@@ -24,10 +26,7 @@
         };
 
         const scanQRCode = () => {
-            const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
             context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
@@ -41,7 +40,7 @@
 
         startButton.addEventListener('click', () => {
             startScanner();
-            videoElement.play(); // iOS에서 play() 추가
+            videoElement.play();
             requestAnimationFrame(scanQRCode);
         });
     </script>
