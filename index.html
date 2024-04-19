@@ -10,12 +10,15 @@
     <video id="videoElement" width="640" height="480" autoplay playsinline></video>
     <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
     <button id="startButton">QR 코드 스캔 시작</button>
-
+    <button id="lottoNumber">로또 번호 생성</button>
+    <h3 id="lottoNumberList"></h3>
     <script>
         const videoElement = document.getElementById('videoElement');
         const canvas = document.getElementById('canvas');
         const startButton = document.getElementById('startButton');
-
+        const lottoNumberButton = document.getElementById('lottoNumber');
+        const lottoNumber = document.getElementById('lottoNumberList');
+        let lottoNumberList = [];
         const startScanner = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -39,10 +42,26 @@
             }
         };
 
+        const lottoNumList = () => {
+            let numberList = [];
+            while (numberList.length < 6) {
+                let randomNumber = Math.floor(Math.random() * 45) + 1;
+                if (!numberList.includes(randomNumber)) {
+                    numberList.push(randomNumber);
+                }
+            }
+            setLottoNumber(numberList);
+            lottoNumber.innerText(numberList);
+        }
+
         startButton.addEventListener('click', () => {
             startScanner();
             videoElement.play();
             requestAnimationFrame(scanQRCode);
+        });
+
+        lottoNumberButton.addEventListener('click', () => {
+            lottoNumList();
         });
     </script>
 
